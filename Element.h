@@ -14,7 +14,7 @@ private:
 
 public:
     Element():x(0),fx(0),rank(0){};
-    Element(vector<T> xvect, vector<E> fx_vect): x(xvect), fx(fx_vect), rank(0) {};
+    Element(vector<T> xvect): x(xvect), fx(0), rank(0) {};
     vector<T>& getX() const{ return x;}
     void setX(vector<T>& x) {this->x = x;}
     vector<E>& getFx() const { return fx;}
