@@ -78,10 +78,9 @@ public:
         ElementsReordering(0, size-1);
     }
 
-    vector<Element<T,E>>& getElements() const{
+    vector<Element<T,E>> getElements() const{
         return elements;
     }
-
 
 };
 

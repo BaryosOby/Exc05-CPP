@@ -36,7 +36,7 @@ class dataBase {
     };
 
     ifstream input;
-    ifstream output;
+    ofstream output;
 
     vector<double> targetVect(const vector<double>& x);
 

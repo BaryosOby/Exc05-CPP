@@ -6,7 +6,10 @@
 using namespace std;
 
 
-template <class T,class E> class Element {
+template <typename T, typename E> class Element;
+template <typename T, typename E> std::ostream& operator<< (std::ostream& o, const Element<T, E>& element);
+
+template <typename T,typename E> class Element {
 private:
     vector<T> x;
     vector<E> fx;
@@ -16,7 +19,7 @@ public:
     Element():x(0),fx(0),rank(0){};
     explicit Element(vector<T> xvect): x(xvect), rank(0) {};
     Element(vector<T> xvect, vector<E> f): x(xvect), fx(f), rank(0) {}; //TODO DELETE
-    vector<T>& getX() const{ return x;}
+    vector<T> getX() const { return x;}
     void setX(vector<T>& x) {this->x = x;}
     vector<E>& getFx() const { return fx;}
     void setfX(vector<T>& f) const{this->fx = fx;}
@@ -61,6 +64,14 @@ public:
 };
 
 
+template <typename T, typename E>
+ostream& operator<<(ostream& out, const Element<T,E>& elem )
+{
+    vector<T> x = elem.getX();
+    for(int i=0; i<x.size(); ++i)
+        out<<fixed << setprecision(6) << x[i];
+    return out;
+}
 
 
 

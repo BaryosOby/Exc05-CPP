@@ -19,7 +19,7 @@ dataBase::dataBase(string sInput, string sOutput) {
     firstLine >> m;
     firstLine >> steps;
     if (mu == -1 || n == -1 || m == -1 | steps == -1) {
-        throw dataBaseException("ERROR: simulation definition in input.dat is invalid\n");
+        throw dataBaseException("ERROR: simulation definition in input.dat.dat is invalid\n");
     }
 
     numOfElems = mu; //TODO CHANGED
@@ -65,7 +65,7 @@ vector<double> dataBase::targetVect(const vector<double> &x) {
     for(int m = 0; m < fxSize; m++){
         double res = 0;
         for(int n = 0; n < vectorSize; n++){
-            res += (x[n] - m) * (x[n] - m);
+            res += (x[n] - (m + 1)) * (x[n] - (m + 1));
         }
         targets.push_back(res);
     }
@@ -100,6 +100,12 @@ void dataBase::run() {
         addRandElements();
         container.pareSorting();
         container.removeKElements(numOfElems / 2);
+    }
+
+    string newLine = "";
+    for(int j = 0; j < numOfElems; j++){
+        output << newLine << container.getElements()[j];
+        newLine = "\n";
     }
 
 }
