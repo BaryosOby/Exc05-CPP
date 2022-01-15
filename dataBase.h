@@ -2,6 +2,7 @@
 #define EX5_DATABASE_H
 #include <fstream>
 #include <iostream>
+#include <ios>
 #include <string>
 #include <sstream>
 #include <cstdlib>

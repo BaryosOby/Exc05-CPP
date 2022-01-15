@@ -4,13 +4,13 @@ dataBase::dataBase(string sInput, string sOutput) {
     vector<Element<double, double>> elementsVector;
     int mu, m, n, steps;
     string line;
-    input.open(sInput.c_str());
+    input.open(sInput.c_str(), ios::in);
     if (!input) {
-        throw dataBaseException("ERROR: init.dat does not exist or cannot be opened\\n");
+        throw dataBaseException("ERROR: init.dat does not exist or cannot be opened\n");
     }
-    output.open(sOutput.c_str());
+    output.open(sOutput.c_str(), ios:: out);
     if (!output) {
-        throw dataBaseException("ERROR: output.dat does not exist or cannot be opened\\n");
+        throw dataBaseException("ERROR: output.dat does not exist or cannot be opened\n");
     }
     getline(input, line);
     stringstream firstLine(line);
@@ -18,8 +18,8 @@ dataBase::dataBase(string sInput, string sOutput) {
     firstLine >> n;
     firstLine >> m;
     firstLine >> steps;
-    if (mu == -1 || n == -1 || m == -1 | steps == -1) {
-        throw dataBaseException("ERROR: simulation definition in input.dat.dat is invalid\n");
+    if (mu == -1 || n == -1 || m == -1 || steps == -1) {
+        throw dataBaseException("ERROR: simulation definition in input.dat is invalid\n");
     }
 
     numOfElems = mu; //TODO CHANGED
@@ -57,6 +57,11 @@ dataBase::dataBase(string sInput, string sOutput) {
         if (rowCounter != mu){
             //throw something
         }
+        Element<double,double> temp = Element<double,double>(row);
+        vector<double> target = targetVect(row);
+        temp.setfX(target);
+        elementsVector.push_back(temp);
+        rowCounter++;
     }
 }
 
