@@ -22,10 +22,10 @@ int main() {
     vect.push_back(e1);
     vect.push_back(e2);
     vect.push_back(e3);
-//    vect.push_back(e4);
-//    vect.push_back(e5);
+    vect.push_back(e4);
+    vect.push_back(e5);
 
-    ElementContainer<int, int> cont(vect, 3, 3, 3);
+    ElementContainer<int, int> cont(vect, 5, 3, 3);
     cont.pareSorting();
     int x;
 

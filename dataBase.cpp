@@ -1,7 +1,3 @@
-//
-// Created by elyas on 14/01/2022.
-//
-
 #include "dataBase.h"
 
 dataBase::dataBase(string sInput, string sOutput) {
@@ -25,7 +21,13 @@ dataBase::dataBase(string sInput, string sOutput) {
     if (mu == -1 || n == -1 || m == -1 | steps == -1) {
         throw dataBaseException("ERROR: simulation definition in input.dat is invalid\n");
     }
-    int j = 0,rowCOunter=0;
+
+    numOfElems = mu; //TODO CHANGED
+    vectorSize = n; //TODO CHANGED
+    fxSize = m; //TODO CHANGED
+    iterations = steps; //TODO CHANGED
+
+    int j = 0, rowCounter = 0;
     double tempDouble;
     stringstream getDoubles(line);
     tempDouble = 0;
@@ -35,7 +37,7 @@ dataBase::dataBase(string sInput, string sOutput) {
         j =0;
         while (getDoubles >> tempDouble) {
             if (j == 0) { row = vector<double>(); }
-            if (j == n || rowCOunter == mu) {
+            if (j == n || rowCounter == mu) {
                 if (getDoubles >> tempDouble) {
                     /*means there are to many numbers in current line*/
                     /*clear already allocated memory before throwing an exception*/
@@ -47,14 +49,60 @@ dataBase::dataBase(string sInput, string sOutput) {
                     throw dataBaseException("ERROR: population definition in init.dat at line " + row + "is invalid\n");
                 }
                 elementsVector.push_back(Element<double,double>(row));
-                rowCOunter++;
+                rowCounter++;
             }
             row.push_back(tempDouble);
             j++;
         }
-        if (rowCOunter != mu){
+        if (rowCounter != mu){
             //throw something
         }
     }
 }
+
+vector<double> dataBase::targetVect(const vector<double> &x) {
+    vector<double> targets;
+    for(int m = 0; m < fxSize; m++){
+        double res = 0;
+        for(int n = 0; n < vectorSize; n++){
+            res += (x[n] - m) * (x[n] - m);
+        }
+        targets.push_back(res);
+    }
+    return targets;
+}
+
+void dataBase::addRandElements() {
+    random_device rd;
+    mt19937 gen(rd());
+    normal_distribution<double> dist(0, 1);
+    // init new random x vector for every element in the container
+    for(int i = 0; i < numOfElems; i++){
+        vector<double> randVect = container.getElements()[i].getX();
+
+        // adds random number to the x vector of element[i]
+        for(int j = 0; j < vectorSize; j++){
+            randVect[j] += dist(gen);
+        }
+
+        // creates new Element with the random vector and adds it to the container.
+        Element<double, double> newElem(randVect);
+        vector<double> target = targetVect(randVect);
+        newElem.setfX(target);
+        container.addElement(newElem);
+
+    }
+
+}
+
+void dataBase::run() {
+    for(int i = 0; i < iterations; i++){
+        addRandElements();
+        container.pareSorting();
+        container.removeKElements(numOfElems / 2);
+    }
+
+}
+
+
 

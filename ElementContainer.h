@@ -65,8 +65,8 @@ public:
     ElementContainer(): elements(0), size(0), vectorSize(0), fxSize(0){}
     ElementContainer(vector<Element<T, E>>& elems, int mu, int n, int m) : elements(elems), size(mu), vectorSize(n), fxSize(m){}
 
-    void addElements(vector<Element<T, E>>& vect){
-        elements.insert( elements.end(), vect.begin(), vect.end());
+    void addElement(Element<T, E>& elem){
+        elements.push_back(elem);
     }
 
     void removeKElements(int k){
@@ -75,8 +75,13 @@ public:
 
     void pareSorting(){
         paretoRanking();
-        ElementsReordering(0, size);
+        ElementsReordering(0, size-1);
     }
+
+    vector<Element<T,E>>& getElements() const{
+        return elements;
+    }
+
 
 };
 

@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "ElementContainer.h"
+#include <random>
 
 using namespace std;
 
@@ -21,6 +22,11 @@ class dataBase {
     private:
     void clear();
     ElementContainer<double,double> container;
+    int numOfElems;
+    int vectorSize;
+    int fxSize;
+    int iterations;
+
     class dataBaseException{
     private:
         string e;
@@ -28,14 +34,21 @@ class dataBase {
         dataBaseException(string e):e(e){}
         string& getE(){return e;}
     };
-        ifstream input;
-        ifstream output;
+
+    ifstream input;
+    ifstream output;
+
+    vector<double> targetVect(const vector<double>& x);
+
+
 public:
     dataBase(string input , string output);
+    void addRandElements();
+    void run();
 
 
 
     };
 
 
-#endif //EX5_DATABASE_H
+#endif
