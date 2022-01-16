@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "ElementContainer.h"
-#include <random>
+
 
 using namespace std;
 
@@ -40,6 +40,8 @@ class dataBase {
     ofstream output;
 
     vector<double> targetVect(const vector<double>& x);
+
+    double generateRandNormal();
 
 
 public:

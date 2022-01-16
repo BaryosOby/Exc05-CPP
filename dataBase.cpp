@@ -1,8 +1,8 @@
 #include "dataBase.h"
 
 dataBase::dataBase(string sInput, string sOutput) {
-    vector<Element<double, double>> elementsVector;
-    int mu, m, n, steps;
+    vector<Element<double, double> > elementsVector;
+    int mu = -1, m = -1, n = -1, steps = -1;
     string line;
     input.open(sInput.c_str(), ios::in);
     if (!input) {
@@ -21,20 +21,18 @@ dataBase::dataBase(string sInput, string sOutput) {
     if (mu == -1 || n == -1 || m == -1 || steps == -1) {
         throw dataBaseException("ERROR: simulation definition in input.dat is invalid\n");
     }
-
-    numOfElems = mu; //TODO CHANGED
-    vectorSize = n; //TODO CHANGED
-    fxSize = m; //TODO CHANGED
-    iterations = steps; //TODO CHANGED
-
-    int j = 0, rowCounter = 0;
+    numOfElems = mu;
+    vectorSize = n;
+    fxSize = m;
+    iterations = steps;
+    int rowCounter = 0;
     double tempDouble;
     stringstream getDoubles(line);
     tempDouble = 0;
     vector<double> row;
     while (getline(input, line)) {
         //to do what kind of exception to throw if number of rows is wrong
-        j =0;
+        int j =0;
         while (getDoubles >> tempDouble) {
             if (j == 0) { row = vector<double>(); }
             if (j == n || rowCounter == mu) {
@@ -57,6 +55,13 @@ dataBase::dataBase(string sInput, string sOutput) {
         if (rowCounter != mu){
             //throw something
         }
+        if(j != n){
+            stringstream convert;
+            string row;
+            convert << rowCounter + 1;
+            convert >> row;
+            throw dataBaseException("ERROR: population definition in init.dat at line " + row + " is invalid\n");
+        }
         Element<double,double> temp = Element<double,double>(row);
         vector<double> target = targetVect(row);
         temp.setfX(target);
@@ -77,17 +82,26 @@ vector<double> dataBase::targetVect(const vector<double> &x) {
     return targets;
 }
 
+
+double dataBase::generateRandNormal() {
+    double x = 0;
+    for(int i = 0; i < 12; i++){
+        x += ((double)rand() / RAND_MAX);
+    }
+    x -= 6;
+    return x;
+}
+
+
 void dataBase::addRandElements() {
-    random_device rd;
-    mt19937 gen(rd());
-    normal_distribution<double> dist(0, 1);
+
     // init new random x vector for every element in the container
     for(int i = 0; i < numOfElems; i++){
         vector<double> randVect = container.getElements()[i].getX();
 
         // adds random number to the x vector of element[i]
         for(int j = 0; j < vectorSize; j++){
-            randVect[j] += dist(gen);
+            randVect[j] += generateRandNormal();
         }
 
         // creates new Element with the random vector and adds it to the container.
@@ -101,10 +115,11 @@ void dataBase::addRandElements() {
 }
 
 void dataBase::run() {
+    srand(time(NULL));
     for(int i = 0; i < iterations; i++){
         addRandElements();
         container.pareSorting();
-        container.removeKElements(numOfElems / 2);
+        container.removeKElements(numOfElems);
     }
 
     string newLine = "";

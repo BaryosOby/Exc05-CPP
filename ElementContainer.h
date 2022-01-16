@@ -5,10 +5,10 @@
 
 template <class T, class E>class ElementContainer {
 private:
-    vector<Element<T, E>> elements;
+    vector<Element<T, E> > elements;
     int size;
-    int vectorSize;
-    int fxSize;
+//    int vectorSize;
+//    int fxSize;
 
     void paretoRanking(){
         for(int i = 0 ; i< size; i++){
@@ -25,7 +25,7 @@ private:
     }
 
     void merge(int start, int mid, int end){
-        vector<Element<T, E>> temp;
+        vector<Element<T, E> > temp;
         int i = start, j = mid + 1;
         while(i <= mid && j <= end){
             if(elements[i].getRank() <= elements[j].getRank()){
@@ -62,15 +62,18 @@ private:
     }
 
 public:
-    ElementContainer(): elements(0), size(0), vectorSize(0), fxSize(0){}
-    ElementContainer(vector<Element<T, E>>& elems, int mu, int n, int m) : elements(elems), size(mu), vectorSize(n), fxSize(m){}
+    ElementContainer(): elements(0), size(0){}
+
+    ElementContainer(vector<Element<T, E> >& elems, int mu) : elements(elems), size(mu){}
 
     void addElement(Element<T, E>& elem){
         elements.push_back(elem);
+        size++;
     }
 
     void removeKElements(int k){
         elements.erase(elements.begin()+k,elements.end());
+        size -= k;
     }
 
     void pareSorting(){
@@ -78,7 +81,7 @@ public:
         ElementsReordering(0, size-1);
     }
 
-    vector<Element<T,E>> getElements() const{
+    vector<Element<T,E> > getElements() const{
         return elements;
     }
 
